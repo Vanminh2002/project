@@ -1,5 +1,6 @@
 package org.example.my_project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,6 +32,10 @@ public class Patients {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
      Doctor doctor;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "patient")
+    List<Prescriptions> prescriptions;
 //    @ManyToMany
 //    @JoinTable(
 //            name = "patient_doctor",

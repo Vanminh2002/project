@@ -31,6 +31,11 @@ public class Doctor {
     @JsonIgnore
     @OneToMany(mappedBy = "doctor")
     List<Patients> patients;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "doctor")
+    List<Prescriptions> prescriptions;
+
 //    @ManyToMany(mappedBy = "doctors")
 //    private Set<Patients> patients = new HashSet<>();
 }
