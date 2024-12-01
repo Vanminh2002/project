@@ -22,7 +22,7 @@ public class DoctorController {
     DoctorService doctorService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<DoctorResponse>> createDoctor(@RequestBody DoctorRequest dto) {
+    public ResponseEntity<ApiResponse<DoctorResponse>> createDoctor(@ModelAttribute DoctorRequest dto) {
         DoctorResponse doctor = doctorService.createDoctor(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true, "Doctor created successfully", doctor));
@@ -41,7 +41,7 @@ public class DoctorController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<DoctorResponse>> updateDoctor(@PathVariable Long id, @RequestBody DoctorRequest doctorRequest) {
+    ResponseEntity<ApiResponse<DoctorResponse>> updateDoctor(@PathVariable Long id, @ModelAttribute DoctorRequest doctorRequest) {
         DoctorResponse response = doctorService.updateDoctor(id, doctorRequest);
         return ResponseEntity.ok(new ApiResponse<>(true, "Update Successfully", response));
     }

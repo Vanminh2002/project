@@ -10,6 +10,7 @@ import org.example.my_project.mapper.DoctorMapper;
 import org.example.my_project.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,14 +20,29 @@ import java.util.stream.Collectors;
 public class DoctorService {
     DoctorMapper doctorMapper;
     DoctorRepository doctorRepository;
+    private final FileStorageService fileStorageService;
 
     public DoctorResponse createDoctor(DoctorRequest dto) {
 
         if (doctorRepository.existsByFullName(dto.getFullName())) {
             throw new RuntimeException("Doctor Existed");
         }
+        String imageUrl = null;
+        if (dto.getImageFile() != null) {
+            try {
+                // Lưu file và lấy URL
+                imageUrl = fileStorageService.saveFile(dto.getImageFile());
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading file", e);
+            }
+        }
+
+
         Doctor doctor = doctorMapper.toEntity(dto);
+
+        doctor.setImageUrl(imageUrl);
         Doctor savedDoctor = doctorRepository.save(doctor);
+
         return doctorMapper.toDto(savedDoctor);
     }
 
@@ -50,6 +66,15 @@ public class DoctorService {
         // Dùng mapper để cập nhật thông tin bác sĩ từ DTO vào thực thể
         doctorMapper.updateEntityFromDto(doctorRequest, doctor);
 
+        String imageUrl = doctor.getImageUrl();
+        if (doctor.getImageUrl() != null) {
+            try {
+                imageUrl = fileStorageService.saveFile(doctorRequest.getImageFile());
+            }catch (IOException e){
+                throw new RuntimeException("Error uploading file", e);
+            }
+        }
+        doctor.setImageUrl(imageUrl);
         // Lưu thông tin bác sĩ đã cập nhật
         Doctor updatedDoctor = doctorRepository.save(doctor);
 

@@ -26,6 +26,7 @@ public class Doctor {
     String specialty;
     String phoneNumber;
     String email;
+    String imageUrl;
     LocalDate available_time;
     LocalDate date_joined;
     @JsonIgnore

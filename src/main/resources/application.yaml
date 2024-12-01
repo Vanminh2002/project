@@ -13,8 +13,7 @@ spring:
       max-request-size: 2GB
       enabled: true
 
-file:
-  upload-dir: "src/main/resources/static/uploads"
+
 
 
   jpa:

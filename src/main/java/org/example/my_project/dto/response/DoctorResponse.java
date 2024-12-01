@@ -19,6 +19,7 @@ public class DoctorResponse {
      String email;
      LocalDate available_time;
      LocalDate date_joined;
+     String imageUrl;
 
 //     List<Patients> patients;
 }

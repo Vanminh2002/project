@@ -3,6 +3,7 @@ package org.example.my_project.dto.request;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -11,4 +12,5 @@ public class DoctorRequest {
      String specialty;
      String phoneNumber;
      String email;
+     MultipartFile imageFile;
 }
