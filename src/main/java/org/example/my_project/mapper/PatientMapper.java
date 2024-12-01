@@ -11,6 +11,8 @@ import org.mapstruct.MappingTarget;
 public interface PatientMapper {
     Patients toEntity(PatientRequest dto);
 
+
+    @Mapping(source = "imageUrl", target = "imageUrl")
     PatientResponse toDto(Patients entity);
 
     @Mapping(target = "doctor", ignore = true) // Doctor sẽ được xử lý riêng

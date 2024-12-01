@@ -20,15 +20,15 @@ public class FileUploadController {
         this.fileStorageService = fileStorageService;
     }
 
-    @PostMapping
-    public boolean uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        try {
-            fileStorageService.saveFile(file);
-            return true;
-        } catch (IOException e) {
-           LOGGER.log(Level.SEVERE,"Exception occured", e);
-
-        }
-        return false;
-    }
+//    @PostMapping
+//    public boolean uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+//        try {
+//            fileStorageService.saveFile(file);
+//            return true;
+//        } catch (IOException e) {
+//           LOGGER.log(Level.SEVERE,"Exception occured", e);
+//
+//        }
+//        return false;
+//    }
 }

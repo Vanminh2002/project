@@ -10,6 +10,7 @@ import org.example.my_project.mapper.DoctorMapper;
 import org.example.my_project.repository.DoctorRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ public class DoctorService {
     DoctorMapper doctorMapper;
     DoctorRepository doctorRepository;
     private final FileStorageService fileStorageService;
+    private static final String STORAGE_DIRECTORY = "D:\\my_project\\assets";
 
     public DoctorResponse createDoctor(DoctorRequest dto) {
 
@@ -31,7 +33,7 @@ public class DoctorService {
         if (dto.getImageFile() != null) {
             try {
                 // Lưu file và lấy URL
-                imageUrl = fileStorageService.saveFile(dto.getImageFile());
+                imageUrl = fileStorageService.saveFile("doctor",dto.getImageFile());
             } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
@@ -66,17 +68,31 @@ public class DoctorService {
         // Dùng mapper để cập nhật thông tin bác sĩ từ DTO vào thực thể
         doctorMapper.updateEntityFromDto(doctorRequest, doctor);
 
-        String imageUrl = doctor.getImageUrl();
-        if (doctor.getImageUrl() != null) {
+
+        String newImageUrl = null;
+
+        if (doctorRequest.getImageFile() != null && !doctorRequest.getImageFile().isEmpty()){
             try {
-                imageUrl = fileStorageService.saveFile(doctorRequest.getImageFile());
-            }catch (IOException e){
+                newImageUrl = fileStorageService.replaceFile("doctor",doctor.getImageUrl(),doctorRequest.getImageFile());
+            } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
+        }else {
+            newImageUrl = doctor.getImageUrl();
         }
-        doctor.setImageUrl(imageUrl);
-        // Lưu thông tin bác sĩ đã cập nhật
-        Doctor updatedDoctor = doctorRepository.save(doctor);
+
+
+//        String imageUrl = doctor.getImageUrl();
+//        if (doctor.getImageUrl() != null) {
+//            try {
+//                imageUrl = fileStorageService.saveFile(doctorRequest.getImageFile());
+//            }catch (IOException e){
+//                throw new RuntimeException("Error uploading file", e);
+//            }
+//        }
+        doctor.setImageUrl(newImageUrl);
+            // Lưu thông tin bác sĩ đã cập nhật
+            Doctor updatedDoctor = doctorRepository.save(doctor);
 
         // Trả về phản hồi dưới dạng DTO
         return doctorMapper.toDto(updatedDoctor);

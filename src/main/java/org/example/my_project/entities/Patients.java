@@ -28,6 +28,7 @@ public class Patients {
     String phoneNumber;
     String email;
     String address;
+    String imageUrl;
     LocalDate dateJoined;
     @ManyToOne
     @JoinColumn(name = "doctor_id")

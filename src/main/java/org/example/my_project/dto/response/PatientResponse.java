@@ -18,4 +18,5 @@ public class PatientResponse {
      LocalDate dateJoined;
 
      DoctorResponse doctor;
+     String imageUrl;
 }
