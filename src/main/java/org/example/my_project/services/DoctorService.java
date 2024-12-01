@@ -33,7 +33,7 @@ public class DoctorService {
         if (dto.getImageFile() != null) {
             try {
                 // Lưu file và lấy URL
-                imageUrl = fileStorageService.saveFile("doctor",dto.getImageFile());
+                imageUrl = fileStorageService.saveFile("doctor", dto.getImageFile());
             } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
@@ -71,28 +71,21 @@ public class DoctorService {
 
         String newImageUrl = null;
 
-        if (doctorRequest.getImageFile() != null && !doctorRequest.getImageFile().isEmpty()){
+        if (doctorRequest.getImageFile() != null && !doctorRequest.getImageFile().isEmpty()) {
             try {
-                newImageUrl = fileStorageService.replaceFile("doctor",doctor.getImageUrl(),doctorRequest.getImageFile());
+                newImageUrl = fileStorageService.replaceFile("doctor", doctor.getImageUrl(), doctorRequest.getImageFile());
             } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
-        }else {
+        } else {
             newImageUrl = doctor.getImageUrl();
         }
 
 
-//        String imageUrl = doctor.getImageUrl();
-//        if (doctor.getImageUrl() != null) {
-//            try {
-//                imageUrl = fileStorageService.saveFile(doctorRequest.getImageFile());
-//            }catch (IOException e){
-//                throw new RuntimeException("Error uploading file", e);
-//            }
-//        }
+//
         doctor.setImageUrl(newImageUrl);
-            // Lưu thông tin bác sĩ đã cập nhật
-            Doctor updatedDoctor = doctorRepository.save(doctor);
+        // Lưu thông tin bác sĩ đã cập nhật
+        Doctor updatedDoctor = doctorRepository.save(doctor);
 
         // Trả về phản hồi dưới dạng DTO
         return doctorMapper.toDto(updatedDoctor);

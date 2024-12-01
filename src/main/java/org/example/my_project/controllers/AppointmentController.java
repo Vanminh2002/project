@@ -19,7 +19,7 @@ public class AppointmentController {
     AppointmentServices appointmentServices;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(@RequestBody AppointmentRequest request) {
+    public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(@ModelAttribute AppointmentRequest request) {
         AppointmentResponse response = appointmentServices.createAppointment(request);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>(true, "Appointment created successfully", response));

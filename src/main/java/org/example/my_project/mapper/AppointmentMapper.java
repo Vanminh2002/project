@@ -11,6 +11,8 @@ public interface AppointmentMapper {
 
     @Mapping(source = "patient.fullName", target = "patientName")
     @Mapping(source = "doctor.fullName", target = "doctorName")
+    @Mapping(source = "imageUrl", target = "imageUrl")
+
     AppointmentResponse toResponse(Appointment appointment);
 
     @Mapping(target = "id", ignore = true)

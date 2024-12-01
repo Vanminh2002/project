@@ -15,6 +15,8 @@ import org.example.my_project.repository.PatientsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -24,6 +26,7 @@ public class AppointmentServices {
     DoctorRepository doctorRepository;
     AppointmentMapper appointmentMapper;
     AppointmentRepository appointmentRepository;
+    private final FileStorageService fileStorageService;
 
     @Transactional
     public AppointmentResponse createAppointment(AppointmentRequest request) {
@@ -32,7 +35,19 @@ public class AppointmentServices {
         Doctor doctor = doctorRepository.findById(request.getDoctorId())
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
+
+
+        String imageUrl = null;
+        if (request.getImageFile() != null) {
+            try {
+                // Lưu file và lấy URL
+                imageUrl = fileStorageService.saveFile("appointment",request.getImageFile());
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading file", e);
+            }
+        }
         Appointment appointment = appointmentMapper.toEntity(request);
+        appointment.setImageUrl(imageUrl);
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);
 
@@ -50,6 +65,9 @@ public class AppointmentServices {
     public AppointmentResponse updateAppointmentStatus(Long id, String status) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
+
+
+
 
         appointment.setStatus(Appointment.Status.valueOf(status.toUpperCase()));
         Appointment updatedAppointment = appointmentRepository.save(appointment);

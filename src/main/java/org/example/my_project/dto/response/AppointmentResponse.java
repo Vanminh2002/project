@@ -14,6 +14,7 @@ public class AppointmentResponse {
     String doctorName;
     LocalDateTime appointmentTime;
     String status;
+    String imageUrl;
     LocalDateTime created_at;
     LocalDateTime updated_at;
 }

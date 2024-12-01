@@ -29,6 +29,8 @@ public class Appointment {
     private LocalDateTime created_at; // Thời gian tạo bản ghi
 
     private LocalDateTime updated_at;
+    String imageUrl;
+
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
