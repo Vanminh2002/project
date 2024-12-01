@@ -22,19 +22,19 @@ public class Prescriptions {
     private Long prescriptionId;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctorId" )
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patientId")
     private Patients patient;
 
     private LocalDateTime prescriptionDate;
 
     private String medicationDetails;
 
-//    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<PrescriptionMedication> prescriptionMedications = new ArrayList<>();
+    @OneToMany(mappedBy = "prescription", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PrescriptionMedication> prescriptionMedications = new ArrayList<>();
 
     private LocalDateTime createdAt;
 

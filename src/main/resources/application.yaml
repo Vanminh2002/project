@@ -13,6 +13,10 @@ spring:
       max-request-size: 2GB
       enabled: true
 
+file:
+  upload-dir: "src/main/resources/static/uploads"
+
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,7 +25,6 @@ spring:
 
       hibernate:
         format_sql: true
-
 
 logging:
   level:
