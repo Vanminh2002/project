@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class PrescriptionService {
     PrescriptionRepository prescriptionRepository;
     MedicationRepository medicationRepository;
-//    PrescriptionMedicationRepository prescriptionMedicationRepository;
+
     PrescriptionMapper prescriptionMapper;
     DoctorRepository doctorRepository;
     PatientsRepository patientsRepository;
