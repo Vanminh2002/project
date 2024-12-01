@@ -25,10 +25,7 @@ import java.util.List;
 public class PrescriptionService {
     PrescriptionRepository prescriptionRepository;
     MedicationRepository medicationRepository;
-<<<<<<< HEAD
 
-=======
->>>>>>> ccb3528fc18601f27287de93bb4c261a6adaa32c
     PrescriptionMapper prescriptionMapper;
     DoctorRepository doctorRepository;
     PatientsRepository patientsRepository;
