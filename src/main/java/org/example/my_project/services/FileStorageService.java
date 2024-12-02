@@ -17,7 +17,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FileStorageService {
-    private static final String STORAGE_DIRECTORY = "D:\\my_project\\assets";
+//    D:\project\assets
+//    D:\my_project\assets
+    private static final String STORAGE_DIRECTORY = "D:\\project\\assets";
 
 //    public String saveFile(MultipartFile file) throws IOException {
 //        if (file.isEmpty()) {

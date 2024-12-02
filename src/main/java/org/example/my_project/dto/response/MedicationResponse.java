@@ -15,7 +15,7 @@ public class MedicationResponse {
     String description;  // Mô tả thuốc (nếu cần)
     String createdAt;
     String updatedAt;
-
+    String imageUrl;
 
     public MedicationResponse(Long id, String name, String dosage, String form, String manufacturer, String description) {
     }

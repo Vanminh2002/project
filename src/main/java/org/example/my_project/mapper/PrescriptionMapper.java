@@ -49,6 +49,6 @@ public interface PrescriptionMapper {
                 .collect(Collectors.toList());
     }
 
-    void updateEntityFromDto(PatientRequest dto, @MappingTarget Patients entity);
+    void updateEntityFromDto(PrescriptionRequest dto, @MappingTarget Prescriptions entity);
 
 }

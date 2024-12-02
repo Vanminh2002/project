@@ -1,5 +1,6 @@
 package org.example.my_project.services;
 
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -57,4 +58,6 @@ public class PrescriptionService {
 
         return prescriptionMapper.toDto(savePrescription);
     }
+
+
 }

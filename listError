@@ -1,0 +1,2 @@
++ No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call
+

@@ -21,7 +21,7 @@ public class MedicationController {
     MedicationService medicationService;
 
     @PostMapping
-    ResponseEntity<ApiResponse<MedicationResponse>> createMedication(@RequestBody MedicationRequest request) {
+    ResponseEntity<ApiResponse<MedicationResponse>> createMedication(@ModelAttribute MedicationRequest request) {
         MedicationResponse response = medicationService.createMedication(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, "Create Medication Success", response));
     }
@@ -40,7 +40,7 @@ public class MedicationController {
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<MedicationResponse>> updateMedication(@PathVariable Long id, @RequestBody MedicationRequest request) {
+    ResponseEntity<ApiResponse<MedicationResponse>> updateMedication(@PathVariable Long id, @ModelAttribute MedicationRequest request) {
         MedicationResponse response = medicationService.updateMedication(id, request);
 
         return ResponseEntity.ok(new ApiResponse<>(true, "Update Success", response));

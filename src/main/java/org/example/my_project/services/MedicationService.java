@@ -10,6 +10,7 @@ import org.example.my_project.mapper.MedicationMapper;
 import org.example.my_project.repository.MedicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,16 +21,27 @@ import java.util.stream.Collectors;
 public class MedicationService {
     MedicationMapper medicationMapper;
     MedicationRepository medicationRepository;
+    private final FileStorageService fileStorageService;
 
     public MedicationResponse createMedication(MedicationRequest request) {
 
 
-        if (medicationRepository.existsByName(request.getName())) {
-            throw new RuntimeException("Medication Existed");
+//        if (medicationRepository.existsByName(request.getName())) {
+//            throw new RuntimeException("Medication Existed");
+//        }
+
+        String imageUrl = null;
+        if (request.getImageFile() != null) {
+            try {
+                // Lưu file và lấy URL
+                imageUrl = fileStorageService.saveFile("medication", request.getImageFile());
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading file", e);
+            }
         }
         // Tạo thuốc mới từ DTO
         Medications medication = medicationMapper.toEntity(request);  // Sử dụng Mapper để chuyển DTO sang Entity
-
+        medication.setImageUrl(imageUrl);
         medication.setCreatedAt(LocalDateTime.now());
         medication.setUpdatedAt(LocalDateTime.now());
 
@@ -57,6 +69,22 @@ public class MedicationService {
         medicationMapper.updateMedication(request,medications);
         medications.setUpdatedAt(LocalDateTime.now());
 
+
+        String newImageUrl = null;
+
+        if (request.getImageFile() != null && !request.getImageFile().isEmpty()) {
+            try {
+                newImageUrl = fileStorageService.replaceFile("medication", medications.getImageUrl(), request.getImageFile());
+            } catch (IOException e) {
+                throw new RuntimeException("Error uploading file", e);
+            }
+        } else {
+            newImageUrl = medications.getImageUrl();
+        }
+
+
+//
+        medications.setImageUrl(newImageUrl);
         Medications medicationsSave = medicationRepository.save(medications);
 
         return  medicationMapper.toResponse(medicationsSave);

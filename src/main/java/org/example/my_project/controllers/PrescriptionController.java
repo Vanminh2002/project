@@ -11,10 +11,7 @@ import org.example.my_project.services.PrescriptionService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +24,10 @@ public class PrescriptionController {
     ResponseEntity<ApiResponse<PrescriptionResponse>> createPrescription(@RequestBody PrescriptionRequest prescriptionRequest) {
         PrescriptionResponse response = prescriptionService.addPrescription(prescriptionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, "Create Prescription Success", response));
+    }
+    @PutMapping("/{id}")
+    ResponseEntity<ApiResponse<PrescriptionResponse>> updatePrescription(@PathVariable Long id, @RequestBody PrescriptionRequest prescriptionRequest) {
+        PrescriptionResponse response = prescriptionService.updatePrescription(prescriptionRequest, id);
+        return ResponseEntity.ok(new ApiResponse<>(true, "Update Prescription Success", response));
     }
 }

@@ -1,6 +1,7 @@
 package org.example.my_project.dto.request;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class MedicationRequest {
@@ -9,4 +10,5 @@ public class MedicationRequest {
     private String form;  // Dạng thuốc (ví dụ: viên, siro, tiêm, v.v.)
     private String manufacturer;  // Nhà sản xuất
     private String description;
+    MultipartFile imageFile;
 }

@@ -23,6 +23,7 @@ public interface MedicationMapper {
 
     List<MedicationResponseDTO> toResponseList(List<PrescriptionMedication> prescriptionMedications);
 
+    @Mapping(source = "imageUrl", target = "imageUrl")
     MedicationResponse toResponse(Medications medication);
 
     Medications toEntity(MedicationRequest requestDTO);

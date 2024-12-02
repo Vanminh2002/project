@@ -21,13 +21,13 @@ public class Medications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-     String name;  // Tên thuốc
-     String dosage;  // Liều dùng
-     String form;  // Dạng thuốc (ví dụ: viên, siro)
-     String manufacturer;  // Nhà sản xuất
-     String description;  // Mô tả thuốc (nếu cần)
-
-     LocalDateTime createdAt;
-     LocalDateTime updatedAt;
+    String name;  // Tên thuốc
+    String dosage;  // Liều dùng
+    String form;  // Dạng thuốc (ví dụ: viên, siro)
+    String manufacturer;  // Nhà sản xuất
+    String description;  // Mô tả thuốc (nếu cần)
+    String imageUrl;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 
 }
