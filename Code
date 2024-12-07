@@ -1,0 +1,4 @@
+1xxx: Lỗi liên quan đến người dùng.
+2xxx: Lỗi liên quan đến dữ liệu hoặc cơ sở dữ liệu.
+3xxx: Lỗi liên quan đến xác thực và phân quyền.
+4xxx: Lỗi hệ thống hoặc server

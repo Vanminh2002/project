@@ -74,7 +74,7 @@ public class PatientService {
         String imageUrl = patients.getImageUrl();
         if (patients.getImageUrl() != null) {
             try {
-                imageUrl = fileStorageService.saveFile("patient",dto.getImageFile());
+                imageUrl = fileStorageService.replaceFile("patient",patients.getImageUrl(),dto.getImageFile());
             }catch (IOException e){
                 throw new RuntimeException("Error uploading file", e);
             }
@@ -89,6 +89,6 @@ public class PatientService {
         Patients patients = patientsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
-        patientsRepository.deleteById(id);
+        patientsRepository.delete(patients);
     }
 }

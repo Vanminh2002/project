@@ -23,34 +23,56 @@ public class MedicationController {
     @PostMapping
     ResponseEntity<ApiResponse<MedicationResponse>> createMedication(@ModelAttribute MedicationRequest request) {
         MedicationResponse response = medicationService.createMedication(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, "Create Medication Success", response));
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.<MedicationResponse>builder()
+                .message("Create Medication Success ")
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
     }
 
     @GetMapping
     ResponseEntity<ApiResponse<List<MedicationResponse>>> getAll() {
         List<MedicationResponse> responses = medicationService.getAllMedications();
-        return ResponseEntity.ok(new ApiResponse<>(true, "Medication Success", responses));
+        return ResponseEntity.ok(ApiResponse.<List<MedicationResponse>>builder()
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(responses)
+                .build());
     }
 
     @GetMapping("/{id}")
     ResponseEntity<ApiResponse<MedicationResponse>> getById(@PathVariable Long id) {
 
         MedicationResponse response = medicationService.getById(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Medication Success", response));
+        return ResponseEntity.ok(ApiResponse.<MedicationResponse>builder()
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
     }
 
     @PutMapping("/{id}")
     ResponseEntity<ApiResponse<MedicationResponse>> updateMedication(@PathVariable Long id, @ModelAttribute MedicationRequest request) {
         MedicationResponse response = medicationService.updateMedication(id, request);
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Update Success", response));
+        return ResponseEntity.ok(ApiResponse.<MedicationResponse>builder()
+                .message("Update Medication Success ")
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
 
     }
 
     @DeleteMapping("/{id}")
     ResponseEntity<ApiResponse<Void>> deleteMedication(@PathVariable Long id) {
         medicationService.deleteMedication(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Deleted", null));
+        return ResponseEntity.ok(ApiResponse.<Void>builder()
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(null)
+                .build());
     }
 
 }

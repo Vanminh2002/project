@@ -22,23 +22,46 @@ public class AppointmentController {
     public ResponseEntity<ApiResponse<AppointmentResponse>> createAppointment(@ModelAttribute AppointmentRequest request) {
         AppointmentResponse response = appointmentServices.createAppointment(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ApiResponse<>(true, "Appointment created successfully", response));
+                .body(ApiResponse.<AppointmentResponse>builder()
+                        .message("Created appointment")
+                        .success(true)
+                        .code(HttpStatus.OK.value())
+                        .data(response)
+                        .build());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AppointmentResponse>> getAppointmentById(@PathVariable Long id) {
         AppointmentResponse response = appointmentServices.getAppointmentById(id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Appointment retrieved successfully", response));
+        return ResponseEntity.ok(ApiResponse.<AppointmentResponse>builder()
+
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
     }
+
     @PatchMapping("/{id}/status")
     public ResponseEntity<ApiResponse<AppointmentResponse>> updateAppointmentStatus(@PathVariable Long id, @RequestParam String status) {
         AppointmentResponse response = appointmentServices.updateAppointmentStatus(id, status);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Appointment status updated successfully", response));
+        return ResponseEntity.ok(ApiResponse.<AppointmentResponse>builder()
+                .message("Updated appointment with status " + status)
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
     }
+
     @PatchMapping("/{id}/doctor")
     public ResponseEntity<ApiResponse<AppointmentResponse>> updateDoctor(
             @PathVariable Long id,
             @RequestParam Long newDoctorId) {
         AppointmentResponse response = appointmentServices.updateDoctor(id, newDoctorId);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Doctor updated successfully", response));
+        return ResponseEntity.ok(ApiResponse.<AppointmentResponse>builder()
+                .message("Updated appointment with doctor " + newDoctorId)
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
     }
 }
