@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -25,9 +27,25 @@ public class PrescriptionController {
         PrescriptionResponse response = prescriptionService.addPrescription(prescriptionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>(true, "Create Prescription Success", response));
     }
+    @GetMapping("/{id}")
+    ResponseEntity<ApiResponse<PrescriptionResponse>> getById(@PathVariable Long id) {
+        PrescriptionResponse response = prescriptionService.getById( id);
+        return ResponseEntity.ok(new ApiResponse<>(true, " Prescription ", response));
+    }
+    @GetMapping
+    ResponseEntity<ApiResponse<List<PrescriptionResponse>>> getAll() {
+        List<PrescriptionResponse> response = prescriptionService.getAll();
+        return ResponseEntity.ok(new ApiResponse<>(true, " Prescription ", response));
+    }
+
     @PutMapping("/{id}")
-    ResponseEntity<ApiResponse<PrescriptionResponse>> updatePrescription(@PathVariable Long id, @RequestBody PrescriptionRequest prescriptionRequest) {
-        PrescriptionResponse response = prescriptionService.updatePrescription(prescriptionRequest, id);
-        return ResponseEntity.ok(new ApiResponse<>(true, "Update Prescription Success", response));
+    ResponseEntity<ApiResponse<PrescriptionResponse>> update(@PathVariable Long id, @RequestBody PrescriptionRequest prescriptionRequest) {
+        PrescriptionResponse response = prescriptionService.updatePrescription(id, prescriptionRequest);
+        return ResponseEntity.ok(new ApiResponse<>(true, " Prescription ", response));
+    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
+        prescriptionService.deletePrescription(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -26,7 +28,6 @@ import java.util.List;
 public class PrescriptionService {
     PrescriptionRepository prescriptionRepository;
     MedicationRepository medicationRepository;
-
     PrescriptionMapper prescriptionMapper;
     DoctorRepository doctorRepository;
     PatientsRepository patientsRepository;
@@ -59,5 +60,53 @@ public class PrescriptionService {
         return prescriptionMapper.toDto(savePrescription);
     }
 
+    public PrescriptionResponse getById(Long id) {
+        Prescriptions prescriptions = prescriptionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prescription not found"));
+        return prescriptionMapper.toDto(prescriptions);
+    }
 
+    public List<PrescriptionResponse> getAll() {
+        List<Prescriptions> prescriptions = prescriptionRepository.findAll();
+        List<PrescriptionResponse> prescriptionResponses = new ArrayList<>();
+        for (Prescriptions prescription : prescriptions) {
+            prescriptionResponses.add(prescriptionMapper.toDto(prescription));
+        }
+        return prescriptionResponses;
+    }
+
+    @Transactional
+    public PrescriptionResponse updatePrescription(Long id, PrescriptionRequest prescriptionRequest) {
+        Prescriptions existsPrescription = prescriptionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Prescription not found with ID: " + id));
+
+        List<PrescriptionMedication> newMedications = prescriptionRequest.getMedications().stream().map(
+                medicationRequestDTO -> {
+                    PrescriptionMedication medication = new PrescriptionMedication();
+                    medication.setMedication(medicationRepository.findById(medicationRequestDTO.getId())
+                            .orElseThrow(() -> new RuntimeException("Medication not found with ID: " + medicationRequestDTO.getId())));
+                    medication.setQuantity(medicationRequestDTO.getQuantity());
+                    medication.setPrescription(existsPrescription);
+                    return medication;
+
+                }).collect(Collectors.toList());
+
+        existsPrescription.getPrescriptionMedications().clear();
+        existsPrescription.getPrescriptionMedications().addAll(newMedications);
+        prescriptionRepository.save(existsPrescription);
+        return prescriptionMapper.toDto(existsPrescription);
+
+
+    }
+
+    @Transactional
+    public void deletePrescription(Long id) {
+        Optional<Prescriptions> prescription = prescriptionRepository.findById(id);
+        if (prescription.isPresent()) {
+            Prescriptions prescriptions = prescription.get();
+            prescriptions.setPrescriptionMedications(null);
+//            prescriptionMedicationRepository.deleteByPrescriptionId(id);
+            prescriptionRepository.delete(prescriptions);
+        }
+    }
 }
