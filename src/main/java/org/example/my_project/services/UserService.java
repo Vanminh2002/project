@@ -27,6 +27,7 @@ public class UserService {
     public UserResponse createUser(UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTS);
+//            throw new RuntimeException("ErrorCode.USER_EXISTS");
         }
         String imageUrl = null;
         if (userRequest.getImageFile() != null) {
@@ -34,7 +35,7 @@ public class UserService {
                 // Lưu file và lấy URL
                 imageUrl = fileStorageService.saveFile("user", userRequest.getImageFile());
             } catch (IOException e) {
-                throw new RuntimeException("Error uploading file", e);
+                throw new AppException(ErrorCode.UPLOADING_EXCEPTION);
             }
         }
         User user = userMapper.toUser(userRequest);
@@ -53,13 +54,13 @@ public class UserService {
 
     public UserResponse getUserById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
 
     public UserResponse updateUser(String id, UserRequest userRequest) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
         userMapper.updateUser(user, userRequest);
         String imageUrl = user.getImageUrl();
@@ -67,7 +68,7 @@ public class UserService {
             try {
                 imageUrl = fileStorageService.replaceFile("user", user.getImageUrl(), userRequest.getImageFile());
             } catch (IOException e) {
-                throw new RuntimeException("Error uploading file", e);
+                throw new AppException(ErrorCode.UPLOADING_EXCEPTION);
             }
         }
         user.setImageUrl(imageUrl);
@@ -78,7 +79,7 @@ public class UserService {
 
     public void delete(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         userRepository.delete(user);
     }
 

@@ -12,9 +12,9 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserRequest {
     String fullName;
-    @Size(min = 2, max = 20, message = "Username is minimum 2 character and maximum 20 character ")
+    @Size(min = 2, max = 20, message = "USERNAME_INVALID")
     String username;
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
     LocalDate dob;
     MultipartFile imageFile;
