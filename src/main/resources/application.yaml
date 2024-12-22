@@ -35,3 +35,10 @@ logging:
         type:
           descriptor:
             sql: TRACE
+
+jwt:
+  signerKey: "ZdvNMDHyNDEhxmiBpJy4ZLTnvdeaXursPU5Es/3LyPfn6uVUHC2xq0E+JASVForD"
+
+
+
+

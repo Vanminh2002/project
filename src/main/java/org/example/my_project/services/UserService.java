@@ -10,6 +10,8 @@ import org.example.my_project.exception.AppException;
 import org.example.my_project.exception.ErrorCode;
 import org.example.my_project.mapper.UserMapper;
 import org.example.my_project.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,6 +25,7 @@ public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
     FileStorageService fileStorageService;
+    PasswordEncoder passwordEncoder;
 
     public UserResponse createUser(UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.getUsername())) {
@@ -40,6 +43,7 @@ public class UserService {
         }
         User user = userMapper.toUser(userRequest);
         user.setImageUrl(imageUrl);
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         userRepository.save(user);
 
         return userMapper.toUserResponse(user);
@@ -72,6 +76,7 @@ public class UserService {
             }
         }
         user.setImageUrl(imageUrl);
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         User updatedUser = userRepository.save(user);
         return userMapper.toUserResponse(updatedUser);
     }

@@ -13,5 +13,6 @@ public class UserResponse {
     String fullName;
     String username;
     LocalDate dob;
+    String password;
     String imageUrl;
 }
