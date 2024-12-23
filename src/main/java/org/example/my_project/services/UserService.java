@@ -65,7 +65,9 @@ public class UserService {
     public UserResponse updateUser(String id, UserRequest userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-
+        if (userRepository.existsByUsername(userRequest.getUsername())) {
+            throw new AppException(ErrorCode.USER_EXISTS);
+        }
         userMapper.updateUser(user, userRequest);
         String imageUrl = user.getImageUrl();
         if (user.getImageUrl() != null) {
