@@ -14,7 +14,7 @@ public class UserRequest {
     String fullName;
     @Size(min = 2, max = 20, message = "USERNAME_INVALID")
     String username;
-    @Size(min = 8, message = "PASSWORD_INVALID")
+    @Size(min = 4, message = "PASSWORD_INVALID")
     String password;
     LocalDate dob;
     MultipartFile imageFile;

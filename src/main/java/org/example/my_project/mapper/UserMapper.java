@@ -13,7 +13,7 @@ public interface UserMapper {
     User toUser(UserRequest user);
 
     @Mapping(source = "imageUrl", target = "imageUrl")
-    @Mapping(source = "password", target = "password")
+//    @Mapping(source = "password", target = "password")
     UserResponse toUserResponse(User user);
 
     void updateUser(@MappingTarget User user, UserRequest userRequest);

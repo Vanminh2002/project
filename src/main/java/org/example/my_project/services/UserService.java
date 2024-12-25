@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.example.my_project.dto.request.UserRequest;
 import org.example.my_project.dto.response.UserResponse;
 import org.example.my_project.entities.User;
+import org.example.my_project.enums.Role;
 import org.example.my_project.exception.AppException;
 import org.example.my_project.exception.ErrorCode;
 import org.example.my_project.mapper.UserMapper;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +46,9 @@ public class UserService {
         User user = userMapper.toUser(userRequest);
         user.setImageUrl(imageUrl);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        HashSet<String> roles = new HashSet<>();
+        roles.add(Role.USER.name());
+        user.setRoles(roles);
         userRepository.save(user);
 
         return userMapper.toUserResponse(user);

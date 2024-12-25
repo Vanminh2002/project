@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -13,6 +14,7 @@ public class UserResponse {
     String fullName;
     String username;
     LocalDate dob;
-    String password;
+//    String password;
     String imageUrl;
+    Set<String> roles;
 }
