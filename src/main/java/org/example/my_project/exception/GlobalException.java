@@ -2,9 +2,11 @@ package org.example.my_project.exception;
 
 import org.example.my_project.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 @ControllerAdvice
 public class GlobalException {
@@ -32,6 +34,19 @@ public class GlobalException {
         ApiResponse response = new ApiResponse();
         response.setMessage(errorCode.getMessage());
         response.setCode(errorCode.getCode());
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity
+                .status(errorCode.getStatusCode())
+                .body(response);
+    }
+
+    @ExceptionHandler(value = AccessDeniedException.class)
+    ResponseEntity<ApiResponse> handleAccessDeniedException(AccessDeniedException exception) {
+        ApiResponse response = new ApiResponse();
+        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
+        return ResponseEntity.status(errorCode.getStatusCode()).body(
+                ApiResponse.builder()
+                        .message(errorCode.getMessage())
+                        .code(errorCode.getCode())
+                        .build());
     }
 }

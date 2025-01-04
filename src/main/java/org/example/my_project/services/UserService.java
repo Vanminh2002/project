@@ -3,6 +3,7 @@ package org.example.my_project.services;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.example.my_project.dto.request.UserRequest;
 import org.example.my_project.dto.response.UserResponse;
 import org.example.my_project.entities.User;
@@ -11,6 +12,9 @@ import org.example.my_project.exception.AppException;
 import org.example.my_project.exception.ErrorCode;
 import org.example.my_project.mapper.UserMapper;
 import org.example.my_project.repository.UserRepository;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserService {
     UserRepository userRepository;
     UserMapper userMapper;
@@ -54,14 +59,22 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
+    // kiểm tra trước khi gọi
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
+        log.info("In method getAllUsers");
         return userRepository.findAll().stream()
                 .map(userMapper::toUserResponse)
                 .collect(Collectors.toList());
 
     }
 
+    // khác biệt với preAuth là kiểu tra sau khi vào hàm
+    @PostAuthorize("hasRole('ADMIN')")
+    // đúng người nào thì dùng của người đó
+//    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUserById(String id) {
+        log.info("In method getUserById");
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return userMapper.toUserResponse(user);
@@ -95,4 +108,13 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public UserResponse getMyInfo() {
+//        lấy user hiện tại
+        var context = SecurityContextHolder.getContext();
+//        từ context hiện tại ta lấy name của người đăng nhập
+        String name = context.getAuthentication().getName();
+//        từ name của người đăng nhập ta lấy user từ userRepository
+        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        return userMapper.toUserResponse(user);
+    }
 }
