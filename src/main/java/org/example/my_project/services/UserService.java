@@ -60,7 +60,7 @@ public class UserService {
     }
 
     // kiểm tra trước khi gọi
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public List<UserResponse> getAllUsers() {
         log.info("In method getAllUsers");
         return userRepository.findAll().stream()

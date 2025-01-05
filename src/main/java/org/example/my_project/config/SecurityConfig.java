@@ -56,14 +56,17 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(HttpMethod.GET, "/app/user/").hasRole(Role.ADMIN.name())
-//                .requestMatchers(HttpMethod.POST, "/app/user/").hasAuthority("ADMIN")
-                .anyRequest().denyAll());
+                .anyRequest().authenticated());
 
 //        đây là authentication provider
         http.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder()).jwtAuthenticationConverter(jwtAuthenticationConverter())));
+                                jwtConfigurer.decoder(jwtDecoder())
+                                        .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
+
+
         http.csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
