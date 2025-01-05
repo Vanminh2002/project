@@ -117,4 +117,8 @@ public class UserService {
         User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
+
+    public UserMapper getUserMapper() {
+        return userMapper;
+    }
 }
