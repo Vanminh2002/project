@@ -32,7 +32,8 @@ public class SecurityConfig {
     protected String SIGNER_KEY;
 
     public final String[] PUBLIC_ENDPOINTS = {
-//            "/user",
+
+            "/user/**",
             "/auth/**",
             "/doctor/**",
             "/patient/**",
@@ -56,7 +57,7 @@ public class SecurityConfig {
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                 .requestMatchers(HttpMethod.GET, "/app/user/").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/app/user/").hasAuthority("ADMIN")
-                .anyRequest().authenticated());
+                .anyRequest().denyAll());
 
 //        đây là authentication provider
         http.oauth2ResourceServer(oauth2 ->
