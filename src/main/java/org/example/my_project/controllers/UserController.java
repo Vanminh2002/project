@@ -97,4 +97,14 @@ public class UserController {
                 .build());
     }
 
+    @GetMapping("/myinfo")
+    ResponseEntity<ApiResponse<UserResponse>> getMyInfo() {
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .message("Get My Info")
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(userService.getMyInfo())
+                .build());
+    }
+
 }

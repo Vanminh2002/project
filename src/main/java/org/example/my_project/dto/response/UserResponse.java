@@ -14,7 +14,7 @@ public class UserResponse {
     String fullName;
     String username;
     LocalDate dob;
-//    String password;
+    //    String password;
     String imageUrl;
     Set<String> roles;
 }
