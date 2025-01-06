@@ -7,10 +7,9 @@ import org.example.my_project.dto.request.AppointmentRequest;
 import org.example.my_project.dto.request.PermissionRequest;
 import org.example.my_project.dto.response.AppointmentResponse;
 import org.example.my_project.dto.response.PermissionResponse;
-import org.example.my_project.entities.Appointment;
-import org.example.my_project.entities.Doctor;
-import org.example.my_project.entities.Patients;
-import org.example.my_project.entities.Permission;
+import org.example.my_project.entities.*;
+import org.example.my_project.exception.AppException;
+import org.example.my_project.exception.ErrorCode;
 import org.example.my_project.mapper.AppointmentMapper;
 import org.example.my_project.mapper.PermissionMapper;
 import org.example.my_project.repository.AppointmentRepository;
@@ -46,6 +45,9 @@ public class PermissionServices {
     }
 
     public void delete(String name) {
+        Permission permission = permissionRepository.findById(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+
         permissionRepository.deleteById(name);
     }
 }
