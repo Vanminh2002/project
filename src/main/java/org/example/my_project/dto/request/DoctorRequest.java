@@ -13,4 +13,7 @@ public class DoctorRequest {
      String phoneNumber;
      String email;
      MultipartFile imageFile;
+     String userId;
+     String username;
+     String password;
 }

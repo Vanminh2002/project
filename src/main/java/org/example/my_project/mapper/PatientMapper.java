@@ -13,6 +13,10 @@ public interface PatientMapper {
 
 
     @Mapping(source = "imageUrl", target = "imageUrl")
+    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(target = "doctor.username",ignore = true)
+    @Mapping(target = "doctor.userId",ignore = true)
     PatientResponse toDto(Patients entity);
 
     @Mapping(target = "doctor", ignore = true) // Doctor sẽ được xử lý riêng

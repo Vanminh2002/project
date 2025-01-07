@@ -17,5 +17,5 @@ public class UserResponse {
     LocalDate dob;
     //    String password;
     String imageUrl;
-    Set<Role> roles;
+    Set<RoleResponse> roles;
 }

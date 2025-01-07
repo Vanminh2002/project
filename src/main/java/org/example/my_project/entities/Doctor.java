@@ -37,6 +37,7 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     List<Prescriptions> prescriptions;
 
-//    @ManyToMany(mappedBy = "doctors")
-//    private Set<Patients> patients = new HashSet<>();
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    User user;
 }

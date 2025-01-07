@@ -37,6 +37,9 @@ public class Patients {
     @JsonIgnore
     @OneToMany(mappedBy = "patient")
     List<Prescriptions> prescriptions;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    User user;
 //    @ManyToMany
 //    @JoinTable(
 //            name = "patient_doctor",

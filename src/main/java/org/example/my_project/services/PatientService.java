@@ -7,9 +7,14 @@ import org.example.my_project.dto.request.PatientRequest;
 import org.example.my_project.dto.response.PatientResponse;
 import org.example.my_project.entities.Doctor;
 import org.example.my_project.entities.Patients;
+import org.example.my_project.entities.User;
+import org.example.my_project.exception.AppException;
+import org.example.my_project.exception.ErrorCode;
 import org.example.my_project.mapper.PatientMapper;
 import org.example.my_project.repository.DoctorRepository;
 import org.example.my_project.repository.PatientsRepository;
+import org.example.my_project.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,8 +31,17 @@ public class PatientService {
     DoctorRepository doctorRepository;
     PatientsRepository patientsRepository;
     private final FileStorageService fileStorageService;
-
+PasswordEncoder passwordEncoder;
+UserRepository userRepository;
     public PatientResponse createPatient(PatientRequest dto) {
+        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new AppException(ErrorCode.USER_EXISTS);
+        }
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setPassword(passwordEncoder.encode(dto.getPassword())); // Mã hóa mật khẩu
+//        user.setRoles(Set.of(new Role("ROLE_DOCTOR"))); // Gán vai trò ROLE_DOCTOR
+//        userRepository.save(user);
         String imageUrl = null;
         if (dto.getImageFile() != null) {
             try {
@@ -43,8 +57,12 @@ public class PatientService {
                     .orElseThrow(() -> new RuntimeException("Doctor not found with id: " + dto.getDoctor_id()));
             patient.setDoctor(doctor);
         }
+
         patient.setImageUrl(imageUrl);;
+        patient.setUser(user);
+        userRepository.save(user);
         Patients savedPatient = patientsRepository.save(patient);
+
         return patientMapper.toDto(savedPatient);
     }
 
@@ -80,6 +98,7 @@ public class PatientService {
             }
         }
         patients.setImageUrl(imageUrl);
+
         Patients updatePatient = patientsRepository.save(patients);
 
         return patientMapper.toDto(updatePatient);

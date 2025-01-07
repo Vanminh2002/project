@@ -16,6 +16,8 @@ public interface DoctorMapper {
 
 
     @Mapping(source = "imageUrl", target = "imageUrl")
+    @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "user.id", target = "userId")
     DoctorResponse toDto(Doctor entity);
 
     void updateEntityFromDto(DoctorRequest dto, @MappingTarget Doctor entity);

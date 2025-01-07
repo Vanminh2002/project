@@ -1,5 +1,6 @@
 package org.example.my_project.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DoctorResponse {
      Long id;
      String fullName;
@@ -20,6 +22,7 @@ public class DoctorResponse {
      LocalDate available_time;
      LocalDate date_joined;
      String imageUrl;
-
+     String userId;
+     String username;
 //     List<Patients> patients;
 }

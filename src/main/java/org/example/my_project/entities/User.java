@@ -1,5 +1,6 @@
 package org.example.my_project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -24,4 +25,11 @@ public class User {
     LocalDate dob;
     @ManyToMany
     Set<Role> roles;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    Patients patient;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    Doctor doctor;
 }

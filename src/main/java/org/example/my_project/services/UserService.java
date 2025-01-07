@@ -11,6 +11,7 @@ import org.example.my_project.enums.Role;
 import org.example.my_project.exception.AppException;
 import org.example.my_project.exception.ErrorCode;
 import org.example.my_project.mapper.UserMapper;
+import org.example.my_project.repository.RoleRepository;
 import org.example.my_project.repository.UserRepository;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +34,7 @@ public class UserService {
     UserMapper userMapper;
     FileStorageService fileStorageService;
     PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     public UserResponse createUser(UserRequest userRequest) {
         if (userRepository.existsByUsername(userRequest.getUsername())) {
@@ -60,7 +62,7 @@ public class UserService {
     }
 
     // kiểm tra trước khi gọi
-    @PreAuthorize("hasRole('USER')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public List<UserResponse> getAllUsers() {
         log.info("In method getAllUsers");
         return userRepository.findAll().stream()
@@ -83,8 +85,16 @@ public class UserService {
     public UserResponse updateUser(String id, UserRequest userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-        if (userRepository.existsByUsername(userRequest.getUsername())) {
-            throw new AppException(ErrorCode.USER_EXISTS);
+//        if (userRepository.existsByUsername(userRequest.getUsername())) {
+//            throw new AppException(ErrorCode.USER_EXISTS);
+//        }
+        if (userRequest.getUsername() != null && !userRequest.getUsername().equals(user.getUsername())) {
+            // Kiểm tra nếu username đã tồn tại trong hệ thống
+            if (userRepository.existsByUsername(userRequest.getUsername())) {
+                throw new AppException(ErrorCode.USER_EXISTS); // Nếu tồn tại, ném lỗi
+            }
+            // Cập nhật username nếu không bị trùng
+            user.setUsername(userRequest.getUsername());
         }
         userMapper.updateUser(user, userRequest);
         String imageUrl = user.getImageUrl();
@@ -97,6 +107,10 @@ public class UserService {
         }
         user.setImageUrl(imageUrl);
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+
+        var roles = roleRepository.findAllById(userRequest.getRoles() );
+        user.setRoles(new HashSet<>(roles));
+
         User updatedUser = userRepository.save(user);
         return userMapper.toUserResponse(updatedUser);
     }

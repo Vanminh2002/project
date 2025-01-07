@@ -17,5 +17,7 @@ public class PatientRequest {
      String address;
      Long doctor_id;
      MultipartFile imageFile;
-
+     String userId;
+     String username;
+     String password;
 }
