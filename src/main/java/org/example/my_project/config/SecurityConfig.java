@@ -34,7 +34,9 @@ public class SecurityConfig {
 
     public final String[] PUBLIC_ENDPOINTS = {
 
-//            "/user/**",
+            "/user/**",
+            "/auth/**",
+            "/auth/login",
             "/auth/**",
             "/doctor/**",
             "/patient/**",
@@ -56,7 +58,6 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .requestMatchers(ADMIN_ENDPOINTS).hasRole("ADMIN")
                 .anyRequest().authenticated());
 
 //        đây là authentication provider

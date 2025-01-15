@@ -1,5 +1,7 @@
 package org.example.my_project.dto.request;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Null;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;

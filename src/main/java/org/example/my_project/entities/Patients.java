@@ -32,7 +32,7 @@ public class Patients {
     LocalDate dateJoined;
     @ManyToOne
     @JoinColumn(name = "doctor_id")
-     Doctor doctor;
+    Doctor doctor;
 
     @JsonIgnore
     @OneToMany(mappedBy = "patient")
