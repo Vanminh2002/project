@@ -1,5 +1,6 @@
 package org.example.my_project.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -7,8 +8,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -23,13 +27,17 @@ public class Appointment {
     LocalDateTime appointmentTime;
 
     @Enumerated(EnumType.STRING)
-     Status status; // Trạng thái của cuộc hẹn: Pending, Confirmed, etc.
+    Status status; // Trạng thái của cuộc hẹn: Pending, Confirmed, etc.
 
     @Column(updatable = false)
     private LocalDateTime created_at; // Thời gian tạo bản ghi
 
     private LocalDateTime updated_at;
     String imageUrl;
+
+    LocalDate date;
+
+    LocalTime time;
 
 
     @ManyToOne
@@ -46,6 +54,7 @@ public class Appointment {
         COMPLETED,
         CANCELLED
     }
+
     // Các getter, setter, constructor
     @PrePersist
     public void prePersist() {

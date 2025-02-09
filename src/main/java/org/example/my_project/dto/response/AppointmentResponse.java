@@ -4,7 +4,11 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.sql.Time;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,4 +21,7 @@ public class AppointmentResponse {
     String imageUrl;
     LocalDateTime created_at;
     LocalDateTime updated_at;
+    LocalDate date;
+
+    LocalTime time;
 }
