@@ -81,7 +81,7 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         return userMapper.toUserResponse(user);
     }
-
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateUser(String id, UserRequest userRequest) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
