@@ -34,10 +34,12 @@ public class Appointment {
 
     private LocalDateTime updated_at;
     String imageUrl;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+    @Column(nullable = false)
+    String date;
 
-    LocalDate date;
 
-    LocalTime time;
+    String time;
 
 
     @ManyToOne
