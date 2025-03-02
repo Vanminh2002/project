@@ -31,6 +31,7 @@ public class DoctorService {
     private static final String STORAGE_DIRECTORY = "D:\\my_project\\assets";
     private final UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+
     public DoctorResponse createDoctor(DoctorRequest dto) {
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
             throw new AppException(ErrorCode.USER_EXISTS);
@@ -59,10 +60,10 @@ public class DoctorService {
 
         doctor.setImageUrl(imageUrl);
 
-            doctor.setUser(user);
+        doctor.setUser(user);
 
-            Doctor savedDoctor = doctorRepository.save(doctor);
-            return doctorMapper.toDto(savedDoctor);
+        Doctor savedDoctor = doctorRepository.save(doctor);
+        return doctorMapper.toDto(savedDoctor);
 
 
     }
@@ -117,4 +118,9 @@ public class DoctorService {
         doctorRepository.deleteById(id);
     }
 
+    public List<DoctorResponse> findByName(String name) {
+        return doctorRepository.findByFullName(name).stream().map(doctorMapper::toDto)
+                .collect(Collectors.toList());
+
+    }
 }

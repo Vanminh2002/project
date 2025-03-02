@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import java.util.List;
 
 @RestController
@@ -72,6 +73,18 @@ public class DoctorController {
                 .success(true)
                 .code(HttpStatus.OK.value())
                 .data(null)
+                .build());
+
+    }
+
+    @GetMapping("/name/{name}")
+    ResponseEntity<ApiResponse<List<DoctorResponse>>> getDoctorByName(@PathVariable String name) {
+        List<DoctorResponse> response  = doctorService.findByName(name);
+        return ResponseEntity.ok(ApiResponse.<List<DoctorResponse>>builder()
+                .message("Doctor Find Success ")
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
                 .build());
 
     }
