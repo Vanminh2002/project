@@ -33,7 +33,7 @@ public class SecurityConfig {
     protected String SIGNER_KEY;
 
     public final String[] PUBLIC_ENDPOINTS = {
-            "/static/assets/**",
+            "/assets/**",
             "/test/**",
 //            "/user/**",
             "/auth/**",
@@ -44,7 +44,8 @@ public class SecurityConfig {
             "/appointment/**",
             "/medication/**",
             "/prescription/**",
-            "/doctor/assets/**"
+            "/doctor/assets/**",
+            "/upload/**"
     };
     public final String[] ADMIN_ENDPOINTS = {
             "/user",
