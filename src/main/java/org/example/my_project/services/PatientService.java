@@ -31,8 +31,9 @@ public class PatientService {
     DoctorRepository doctorRepository;
     PatientsRepository patientsRepository;
     private final FileStorageService fileStorageService;
-PasswordEncoder passwordEncoder;
-UserRepository userRepository;
+    PasswordEncoder passwordEncoder;
+    UserRepository userRepository;
+
     public PatientResponse createPatient(PatientRequest dto) {
         if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
             throw new AppException(ErrorCode.USER_EXISTS);
@@ -46,7 +47,7 @@ UserRepository userRepository;
         if (dto.getImageFile() != null) {
             try {
                 // Lưu file và lấy URL
-                imageUrl = fileStorageService.saveFile("patient",dto.getImageFile());
+                imageUrl = fileStorageService.saveFile("patient", dto.getImageFile());
             } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
@@ -58,7 +59,8 @@ UserRepository userRepository;
             patient.setDoctor(doctor);
         }
 
-        patient.setImageUrl(imageUrl);;
+        patient.setImageUrl(imageUrl);
+        ;
         patient.setUser(user);
         userRepository.save(user);
         Patients savedPatient = patientsRepository.save(patient);
@@ -92,8 +94,8 @@ UserRepository userRepository;
         String imageUrl = patients.getImageUrl();
         if (patients.getImageUrl() != null) {
             try {
-                imageUrl = fileStorageService.replaceFile("patient",patients.getImageUrl(),dto.getImageFile());
-            }catch (IOException e){
+                imageUrl = fileStorageService.replaceFile("patient", patients.getImageUrl(), dto.getImageFile());
+            } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
         }
@@ -104,10 +106,17 @@ UserRepository userRepository;
         return patientMapper.toDto(updatePatient);
 
     }
+
     public void deletePatient(Long id) {
         Patients patients = patientsRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found with id: " + id));
 
         patientsRepository.delete(patients);
     }
+   public PatientResponse  findByUserId(String userId) {
+        Patients patient = patientsRepository.findByUserId(userId);
+        return patientMapper.toDto(patient);
+
+
+   }
 }

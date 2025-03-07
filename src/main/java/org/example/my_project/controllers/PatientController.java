@@ -72,4 +72,18 @@ public class PatientController {
                 .data(null)
                 .build());
     }
+
+
+
+
+    @GetMapping("/by-user/{userId}")
+    ResponseEntity<ApiResponse<PatientResponse>> findByUserId(@PathVariable String userId){
+        PatientResponse response = patientService.findByUserId(userId);
+        return ResponseEntity.ok(ApiResponse.<PatientResponse>builder()
+
+                .success(true)
+                .code(HttpStatus.OK.value())
+                .data(response)
+                .build());
+    }
 }

@@ -35,8 +35,9 @@ public class SecurityConfig {
     protected String SIGNER_KEY;
 
     public final String[] PUBLIC_ENDPOINTS = {
-
-            "/user/**",
+            "/assets/**",
+            "/test/**",
+//            "/user/**",
             "/auth/**",
             "/auth/login",
             "/auth/**",
@@ -45,6 +46,8 @@ public class SecurityConfig {
             "/appointment/**",
             "/medication/**",
             "/prescription/**",
+            "/doctor/assets/**",
+            "/upload/**"
     };
     public final String[] ADMIN_ENDPOINTS = {
             "/user",
@@ -60,6 +63,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers("/static/assets/**").permitAll()
                 .anyRequest().authenticated());
 
 //        đây là authentication provider

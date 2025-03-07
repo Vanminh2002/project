@@ -3,6 +3,8 @@ package org.example.my_project.services;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -10,6 +12,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
@@ -17,8 +21,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class FileStorageService {
-//    D:\project\assets
+    //    D:\project\assets
 //    D:\my_project\assets
+//    D:\project\src\main\resources\static\assets
     private static final String STORAGE_DIRECTORY = "D:\\project\\assets";
 
 //    public String saveFile(MultipartFile file) throws IOException {
@@ -73,6 +78,25 @@ public class FileStorageService {
                 }
             }
         }
-        return saveFile(entityType,file);
+        return saveFile(entityType, file);
     }
+
+    public Resource loadImageAsResource(String entityType, String filename) throws Exception {
+        Path filePath = Paths.get(STORAGE_DIRECTORY, entityType, filename).normalize();
+        System.out.println("Đang tìm file: " + filePath.toAbsolutePath());
+
+        File file = filePath.toFile();
+        System.out.println("File tồn tại? " + file.exists());
+        System.out.println("File có thể đọc? " + file.canRead());
+
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (resource.exists() && resource.isReadable()) {
+            return resource;
+        } else {
+            throw new Exception("File not found: " + filename);
+        }
+    }
+
+
 }

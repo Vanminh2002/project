@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.example.my_project.dto.request.AppointmentRequest;
+import org.example.my_project.dto.request.AppointmentSheduleRequest;
 import org.example.my_project.dto.response.AppointmentResponse;
 import org.example.my_project.entities.Appointment;
 import org.example.my_project.entities.Doctor;
@@ -16,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +40,11 @@ public class AppointmentServices {
                 .orElseThrow(() -> new RuntimeException("Doctor not found"));
 
 
-
         String imageUrl = null;
         if (request.getImageFile() != null) {
             try {
                 // Lưu file và lấy URL
-                imageUrl = fileStorageService.saveFile("appointment",request.getImageFile());
+                imageUrl = fileStorageService.saveFile("appointment", request.getImageFile());
             } catch (IOException e) {
                 throw new RuntimeException("Error uploading file", e);
             }
@@ -65,8 +68,6 @@ public class AppointmentServices {
     public AppointmentResponse updateAppointmentStatus(Long id, String status) {
         Appointment appointment = appointmentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
-
-
 
 
         appointment.setStatus(Appointment.Status.valueOf(status.toUpperCase()));
@@ -93,5 +94,32 @@ public class AppointmentServices {
 
         // Trả về DTO phản hồi
         return appointmentMapper.toResponse(updatedAppointment);
+    }
+
+
+    public List<AppointmentResponse> findByPatientId(Long patientId) {
+
+        return appointmentRepository.findByPatientId(patientId)
+                .stream()
+                .map(appointmentMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    public AppointmentResponse update(Long appointmentId, AppointmentSheduleRequest request) {
+        Appointment appointment = appointmentRepository.findById(appointmentId).orElseThrow(() -> new RuntimeException("Appointment not found"));
+        if (request.getDate() != null && !request.getDate().isEmpty()) {
+            appointment.setDate(request.getDate());
+        }
+        if (request.getTime() != null && !request.getTime().isEmpty()) {
+            appointment.setTime(request.getTime());
+        }
+        if (request.getDoctorId() != null) {
+            Doctor doctor = doctorRepository.findById(request.getDoctorId())
+                    .orElseThrow(() -> new RuntimeException("Doctor not found"));
+            appointment.setDoctor(doctor);
+        }
+        Appointment savedAppointment = appointmentRepository.save(appointment);
+        return appointmentMapper.toResponse(savedAppointment);
     }
 }

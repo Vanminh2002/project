@@ -21,7 +21,7 @@ public class AppointmentResponse {
     String imageUrl;
     LocalDateTime created_at;
     LocalDateTime updated_at;
-    LocalDate date;
+    String date;
 
-    LocalTime time;
+    String time;
 }
