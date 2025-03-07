@@ -38,13 +38,28 @@ public class RoleServices {
         return roleMapper.toRoleResponse(role);
     }
 
+
+    public RoleResponse update(String name, RoleRequest request) {
+        // Tìm Role theo name
+        Role role = roleRepository.findByName(name);
+        // Cập nhật thông tin Role từ request
+        role.setDescription(request.getDescription()); // Giả sử Role có description
+        var permissions = permissionRepository.findAllById(request.getPermissions());
+        role.setPermissions(new HashSet<>(permissions));
+
+        // Lưu lại Role sau khi cập nhật
+        role = roleRepository.save(role);
+        return roleMapper.toRoleResponse(role);
+    }
+
+
     public List<RoleResponse> getAll() {
         var permission = roleRepository.findAll();
         return permission.stream().map(roleMapper::toRoleResponse).toList();
     }
 
     public void delete(String name) {
-       Role role = roleRepository.findById(name).orElseThrow(()->new AppException(ErrorCode.NOT_FOUND));
+        Role role = roleRepository.findById(name).orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         roleRepository.deleteById(name);
     }
 }
